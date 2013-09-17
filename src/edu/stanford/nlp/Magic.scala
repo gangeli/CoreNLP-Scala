@@ -46,54 +46,11 @@ object Magic {
   import NLP._
 
   /*
-   * Private Auxilliary State
-   */
-  /** Cache of string sequences to sentences */
-  private val sentenceCache
-    = new scala.collection.mutable.HashMap[Seq[String],SoftReference[Sentence]]()
-  /** Cache of sentences to their keys */
-  private val revSentenceCache
-    = new scala.collection.mutable.HashMap[SoftReference[Sentence],Seq[String]]()
-  /** Garbage collected references */
-  private val reapedSentenceReferences = new ReferenceQueue[Sentence]
-  /** Thread to clean up cache */
-  private val reaper = new Thread {
-    override def run:Unit = while (true) { // loop
-      val reaped = reapedSentenceReferences.remove.asInstanceOf[SoftReference[Sentence]]
-      revSentenceCache.get(reaped) match {
-        case Some(ref) => sentenceCache.remove(ref);
-        case None => /* do nothing; already gone */
-      }
-      revSentenceCache.remove(reaped)
-    }
-  }
-  reaper.setDaemon(true) // die with the JVM
-  reaper.start
-  protected val nextSentenceId = new java.util.concurrent.atomic.AtomicInteger
-  
-  private def cache(words:Seq[String]):Sentence = {
-    def doCache:Sentence = {
-      val sentence = Sentence(words.toArray)
-      sentence.id = Some(nextSentenceId.getAndIncrement)
-      val ref = new SoftReference(sentence, reapedSentenceReferences)
-      sentenceCache(words) = ref
-      revSentenceCache(ref) = words
-      sentence
-    }
-    sentenceCache.get(words) match {
-      case Some(ref) =>
-        val sentenceOrNull:Sentence = ref.get  // avoid race condition w/gc
-        if (sentenceOrNull == null) doCache else sentenceOrNull
-      case None => doCache
-    }
-  }
-
-
-  /*
    * Implicit Conversions
    */
-  implicit def array2nlpseq(seq:Array[String]):Sentence = cache(seq.toList)
-  implicit def seq2nlpseq(seq:Seq[String]):Sentence = cache(seq)
+  implicit def array2nlpseq(seq:Array[String]):Sentence = Sentence(seq.toList)
+  implicit def seq2nlpseq(seq:Seq[String]):Sentence = Sentence(seq)
+  implicit def string2nlpseq(gloss:String):Sentence = Sentence(gloss)
   
   implicit def map2mapping[I,O,X](map:Map[I,X]):Mapping[I,O] = Mapping(map)
   

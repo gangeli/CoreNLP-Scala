@@ -46,11 +46,16 @@ object Sentence {
   val tokenizerFactory = PTBTokenizer.factory
   val grammaticalStructureFactory
     = new PennTreebankLanguagePack().grammaticalStructureFactory
+  
+  def apply(word:Seq[String]):Sentence = apply(word.toArray)
+  def apply(gloss:String):Sentence = new Sentence(gloss)
 }
 
 
 @SerialVersionUID(2l)
 case class Sentence(word:Array[String]) {
+
+  def this(word:Seq[String]) = this(word.toArray)
 
   def this(sentence:String) = this(
     Sentence.tokenizerFactory.getTokenizer(new java.io.StringReader(sentence))
