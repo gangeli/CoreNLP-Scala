@@ -75,7 +75,8 @@ res1: Array[Double] = Array(0.999994999983933, 1.9999949999682796)
 
 // Build a simple classifier (with some trivial NLP features)
 // Not really to be taken seriously, but kind of fun nonetheless
-scala> val sentimentAnalyzer = Map( "Good plot" -> true, "Good acting" -> true, "Bad plot" -> false, "Bad experience" -> false ).classifier
+scala> val sentimentData = Map( "Good plot" -> true, "Good acting" -> true, "Bad plot" -> false, "Bad experience" -> false )
+scala> val sentimentAnalyzer = sentimentData.classifier
 scala> sentimentAnalyzer("Good movie")
 res0: O = true
 scala> sentimentAnalyzer("Bad movie")
@@ -88,7 +89,8 @@ res3: O = true
 // This also works for Sentences
 // In that case, other features like POS, lemma, NER, etc. are also included, making for an almost reasonable baseline
 scala> import edu.stanford.nlp._
-scala> val spamClassifier = Map( Sentence("discount credit!!! omg awesome!") -> 'spam, Sentence("your Stanford account") -> 'ham, Sentence("Nigerian prince") -> 'spam, Sentence("Chris Manning") -> 'ham ).classifier
+scala> val spamData = Map( Sentence("discount credit!!! omg awesome!") -> 'spam, Sentence("your Stanford account") -> 'ham, Sentence("Nigerian prince") -> 'spam, Sentence("Chris Manning") -> 'ham )
+scala> val spamClassifier = spamData.classifier
 scala> spamClassifier("Buy stuff!!")
 res0: O = 'spam
 scala> spamClassifier("email from Chris")
