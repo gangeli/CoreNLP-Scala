@@ -135,6 +135,7 @@ Of course, the usual magic is still valid as well:
 
 ```scala
 import edu.stanford.nlp.TokensRegex
+import edu.stanford.nlp._
 import edu.stanford.nlp.Magic._
 
 // note: String -> Sentence can't be implicitly converted, else String.matches(String) is invoked
