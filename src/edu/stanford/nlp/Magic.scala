@@ -48,9 +48,9 @@ object Magic {
   /*
    * Implicit Conversions
    */
-  implicit def array2nlpseq(seq:Array[String]):Sentence = Sentence(seq.toList)
-  implicit def seq2nlpseq(seq:Seq[String]):Sentence = Sentence(seq)
-  implicit def string2nlpseq(gloss:String):Sentence = Sentence(gloss)
+  implicit def array2nlpseq(seq:Array[String]):Sentence = new Sentence(seq)
+  implicit def seq2nlpseq(seq:Seq[String]):Sentence = new Sentence(seq)
+  implicit def string2nlpseq(gloss:String):Sentence = new Sentence(gloss)
   
   implicit def map2mapping[I,O,X](map:Map[I,X]):Mapping[I,O] = Mapping(map)
   
@@ -72,4 +72,6 @@ object Magic {
        case _ => throw new IllegalStateException("Unknown algorithm: " + optimize.algorithm)
     }
   }
+
+  implicit def string2tokensregex(str:String):TokensRegex = new TokensRegex(str)
 }

@@ -47,13 +47,13 @@ object Sentence {
   val grammaticalStructureFactory
     = new PennTreebankLanguagePack().grammaticalStructureFactory
   
-  def apply(word:Seq[String]):Sentence = apply(word.toArray)
+  def apply(word:Seq[String]):Sentence = new Sentence(word.toArray)
   def apply(gloss:String):Sentence = new Sentence(gloss)
 }
 
 
 @SerialVersionUID(2l)
-case class Sentence(word:Array[String]) {
+case class Sentence(word:Array[String]) extends CoreLabelSeq {
 
   def this(word:Seq[String]) = this(word.toArray)
 
@@ -63,6 +63,25 @@ case class Sentence(word:Array[String]) {
       .map( _.word )
       .toArray
   )
+
+  //
+  // Necessary Overrides for Seq[CoreLabel]
+  //
+  override def length:Int = word.length
+  override def apply(index:Int):CoreLabel = {
+    val label = new CoreLabel(8)
+    label.setWord(word(index))
+    label.setTag(pos(index))
+    if (index > 0) { label.setAfter(word(index - 1)) }
+    if (index < word.length - 1) { label.setBefore(word(index + 1)) }
+    label.setNER(ner(index))
+    label.setLemma(lemma(index))
+    label.setIndex(index)
+    // TODO(gabor) things like character offsets, original text, etc.
+    label
+  }
+
+
 
   var id:Option[Int] = None
   // values
@@ -129,7 +148,7 @@ case class Sentence(word:Array[String]) {
     recurse(ancestor, stanfordDependencies(descendent)._1, Nil)
   }
 
-  lazy val head:Int = {
+  lazy val headIndex:Int = {
     if (word.length == 1) { 0 }
     else {
       val headLeaf = parse.headTerminal(collinsHeadFinder)
@@ -152,9 +171,9 @@ case class Sentence(word:Array[String]) {
   def words:Array[String] = word
   def tags:Array[String] = pos
 
-  def headWord:String = word(head)
-  def headLemma:String = lemma(head)
-  def headPOS:String = pos(head)
+  def headWord:String = word(headIndex)
+  def headLemma:String = lemma(headIndex)
+  def headPOS:String = pos(headIndex)
   def namedEntities:Array[(Array[String],String)] = {
     // (collect tags)
     val nerTags = word.zip(ner).foldLeft(List[(List[String],String)]()){
@@ -182,7 +201,6 @@ case class Sentence(word:Array[String]) {
   }
 
   def toSentence:Sentence = this
-  def length:Int = word.length
 
   override def equals(a:Any):Boolean = {
     def seqMatch(s:Seq[String]):Boolean = {

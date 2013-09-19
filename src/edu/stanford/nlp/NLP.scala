@@ -114,5 +114,15 @@ object NLP {
   // Methods
   // ----------
   def preload(obj: => Any) { new Thread(){ override def run:Unit = obj }.start }
+}
 
+trait CoreLabelSeq extends Seq[CoreLabel] {
+  //
+  // Trivial overrides (still have to define apply(Int):CoreLabel and length:Int though)
+  //
+  override def iterator:Iterator[CoreLabel] = new Iterator[CoreLabel] {
+      var index:Int = 0
+      override def hasNext:Boolean = index < CoreLabelSeq.this.length
+      override def next:CoreLabel = { index += 1; apply(index - 1); }
+    }
 }
