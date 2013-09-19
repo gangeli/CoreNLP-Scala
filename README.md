@@ -25,23 +25,25 @@ Example Usage
 
 Create a sentence:
 
-    import edu.stanford.nlp._
-    val s = Sentence("NLP is Awesome!")
+```scala
+import edu.stanford.nlp._
+val s = Sentence("NLP is Awesome!")
 
-    // yields: NLP :: is :: awesome :: !
-    println(s.words.mkString(" :: "))
+// yields: NLP :: is :: awesome :: !
+println(s.words.mkString(" :: "))
 
-    // loads POS Tagger and Parser
-    // yields: (ROOT (S (NP (NNP NLP)) (VP (VBZ is) (ADJP (JJ awesome))) (. !)))
-    println(s.parse.toString)
+// loads POS Tagger and Parser
+// yields: (ROOT (S (NP (NNP NLP)) (VP (VBZ is) (ADJP (JJ awesome))) (. !)))
+println(s.parse.toString)
 
-    // loads NER Tagger
-    // yields: ORGANIZATION :: O :: O :: O
-    println(s.ner.mkString(" :: "))
+// loads NER Tagger
+// yields: ORGANIZATION :: O :: O :: O
+println(s.ner.mkString(" :: "))
 
-    // re-uses Parser
-    // yields Array[(Int, String)] = Array((2,nsubj), (2,cop), (-1,root), (3,noop))
-    println(s.stanfordDependencies)
+// re-uses Parser
+// yields Array[(Int, String)] = Array((2,nsubj), (2,cop), (-1,root), (3,noop))
+println(s.stanfordDependencies)
+```
 
 Useful helper functions:
 
