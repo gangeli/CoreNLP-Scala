@@ -27,14 +27,18 @@ Create a sentence:
 
     import edu.stanford.nlp._
     val s = Sentence("NLP is Awesome!")
+
     // yields: NLP :: is :: awesome :: !
     println(s.words.mkString(" :: "))
+
     // loads POS Tagger and Parser
     // yields: (ROOT (S (NP (NNP NLP)) (VP (VBZ is) (ADJP (JJ awesome))) (. !)))
     println(s.parse.toString)
+
     // loads NER Tagger
     // yields: ORGANIZATION :: O :: O :: O
     println(s.ner.mkString(" :: "))
+
     // re-uses Parser
     // yields Array[(Int, String)] = Array((2,nsubj), (2,cop), (-1,root), (3,noop))
     println(s.stanfordDependencies)
@@ -45,9 +49,9 @@ Useful helper functions:
     scala> val s = Sentence("NLP is Awesome!")
     scala> s.namedEntities
     res0: Array[(Array[String], String)] = Array((Array(NLP),ORGANIZATION))
-    scala> s.head
+    scala> s.headIndex
     res1: Int = 1
-    scala> s.headWord // or, s.word(s.head)
+    scala> s.headWord // or, s.word(s.headIndex)
     res2: String = is
 
 Magic!
@@ -71,7 +75,55 @@ Magic!
     res0: O = true
     scala> sentimentAnalyzer.classify("Bad movie")
     res1: O = false
-    
-    
-    
-    
+
+
+In-Depth: TokensRegex
+---------------------
+The wrapper provides a Scala-like interface to TokensRegex, in addition to
+  a small domain specific language for a small subset of the syntax.
+To create a TokensRegex pattern, you can follow code as below:
+
+    import edu.stanford.nlp.TokensRegex
+    val Regex = TokensRegex("""[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""")
+
+    // matches() returns true if the entire sentence matches
+    Regex matches Sentence("Stanford CS") 
+
+    // allMatches() returns all matches for a regex in the sentence
+    for (result <- Regex allMatches Sentence("Stanford NLP is part of Stanford CS")) {
+      println(result)  // prints List(Stanford, NLP) and List(Stanford, CS)
+    }
+
+    // Pattern matching
+    val Regex(subdepartment) = Sentence("Stanford NLP")
+    println(subdepartment)  // prints List(NLP)
+
+    // ...or...
+    Sentence("Stanford NLP") match {
+      case Regex(subdepartment) =>
+        println(subdepartment)  // reaches here; prints List(NLP)
+      case _ =>
+        println("NO MATCH")  // would reach here if not an exact match
+    }
+
+Of course, the usual magic is still valid as well:
+
+    import edu.stanford.nlp.TokensRegex
+    import edu.stanford.nlp.Magic._
+   
+    // note: String -> Sentence can't be implicitly converted, else String.matches(String) is invoked
+    """[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""" matches ( Sentence("Stanford NLP") )
+
+In addition, a small domain specific language can help make some compile-time
+  checks of simple regular expressions.
+In the language, every token is denoted in parentheses `( )`, every term
+  in the parentheses is a comma separated list of conjunctive criteria
+  (e.g., word is `X` and tag is `Y`), and multiple tokens are simply
+  concatenated with each other.
+To illustrate:
+
+    import edu.stanford.nlp._
+    import edu.stanford.nlp.TokensRegex._
+   
+    val Regex = ( word("Stanford") ) ( word("[A-Z].*"), tag("NNP") )
+    Regex matches Sentence("Stanford CS")  // return true
