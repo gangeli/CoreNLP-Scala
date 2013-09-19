@@ -48,7 +48,6 @@ object Magic {
   /*
    * Implicit Conversions
    */
-  implicit def array2nlpseq(seq:Array[String]):Sentence = new Sentence(seq)
   implicit def seq2nlpseq(seq:Seq[String]):Sentence = new Sentence(seq)
   implicit def string2nlpseq(gloss:String):Sentence = new Sentence(gloss)
   
