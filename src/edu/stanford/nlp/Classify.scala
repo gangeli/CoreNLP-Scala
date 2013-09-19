@@ -110,20 +110,44 @@ object Mapping {
       else (seq.head :: tail.slice(0, n-1)).reverse.mkString("_") :: ngram(seq.tail, n, seq.head :: tail)
     }
     input match {
+      case (sent:Sentence) =>
+        val n:Int = (scala.math.log10(datasetSize) / 3.0).toInt + 1
+        // N-grams
+        (ngram(sent.words.toList, n) :::
+         ngram(sent.words.toList.map( _.toLowerCase ), n) :::
+         ngram(sent.lemma.toList, n) :::
+         ngram(sent.ner.toList, n) :::
+         ngram(sent.pos.toList, n) :::
+         // Bag-of-words
+         { if (n > 1)
+            sent.words.toList :::
+            sent.words.toList.map( _.toLowerCase ) :::
+            sent.lemma.toList :::
+            sent.ner.toList :::
+            sent.pos.toList
+           else Nil }
+        ).map{ (_, 1.0.toFloat) }
+      case (str:String) =>
+        val tokens = str.split(" ")
+        val n:Int = (scala.math.log10(datasetSize) / 3.0).toInt + 1
+        if (tokens.length <= 1) {
+          // Case: a single word
+          (tokens(0) ::  // memorize
+            ngram(str.toCharArray.toList, n) :::  // literal n-grams
+            ngram(str.toLowerCase.toCharArray.toList, n)  // case-insensitive n-grams
+            ).map{ (_, 1.0.toFloat) }
+        } else {
+          // Case: a phrase
+          (ngram(tokens.toList, n) :::  // literal n-grams
+           ngram(tokens.toList.map( _.toLowerCase), n)  // case-insensitive n-grams
+          ).map{ (_, 1.0.toFloat) }
+        }
       case (seq:Iterable[Any]) =>
       seq.map{ (x:Any) => x match {
         case (feat:Any, n:Number) => (feat.toString, n.floatValue)
         case (feat:Any) => (feat.toString, 1.0.toFloat)
         case _ => (x.toString, 1.0.toFloat)
       } }
-      case (str:String) =>
-        val tokens = str.split(" ")
-        val n:Int = (scala.math.log10(datasetSize) / 3.0).toInt + 1
-        if (tokens.length <= 1) {
-          (tokens(0) :: ngram(str.toCharArray.toList, n)).map{ (_, 1.0.toFloat) }
-        } else {
-          ngram(tokens.toList, n).map{ (_, 1.0.toFloat) }
-        }
       case _ => List[(String,Float)]( (input.toString, 1.0.toFloat) )
     }
   }
