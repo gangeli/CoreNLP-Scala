@@ -25,6 +25,7 @@ case class TokensRegex(override val toString:String) {
       }
       override def next:Seq[CoreLabel] = {
         if (!hasNext) throw new NoSuchElementException
+        theNext = None
         val m:java.util.List[_ <: CoreMap] = matcher.groupNodes
         m.map( _ match {
           case (x:CoreLabel) => x

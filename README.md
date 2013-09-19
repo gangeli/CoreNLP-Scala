@@ -86,7 +86,7 @@ res2: O = false
 scala> sentimentAnalyzer("good experience")
 res3: O = true
 
-// This also works for Sentences
+// This also works for Sentences, and for arbitrary output
 // In that case, other features like POS, lemma, NER, etc. are also included, making for an almost reasonable baseline
 scala> import edu.stanford.nlp._
 scala> val spamData = Map( Sentence("discount credit!!! omg awesome!") -> 'spam, Sentence("your Stanford account") -> 'ham, Sentence("Nigerian prince") -> 'spam, Sentence("Chris Manning") -> 'ham )
