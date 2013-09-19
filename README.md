@@ -47,37 +47,40 @@ println(s.stanfordDependencies)
 
 Useful helper functions:
 
-    scala> import edu.stanford.nlp._
-    scala> val s = Sentence("NLP is Awesome!")
-    scala> s.namedEntities
-    res0: Array[(Array[String], String)] = Array((Array(NLP),ORGANIZATION))
-    scala> s.headIndex
-    res1: Int = 1
-    scala> s.headWord // or, s.word(s.headIndex)
-    res2: String = is
+```scala
+scala> import edu.stanford.nlp._
+scala> val s = Sentence("NLP is Awesome!")
+scala> s.namedEntities
+res0: Array[(Array[String], String)] = Array((Array(NLP),ORGANIZATION))
+scala> s.headIndex
+res1: Int = 1
+scala> s.headWord // or, s.word(s.headIndex)
+res2: String = is
+```
 
 Magic!
 
-    scala> import edu.stanford.nlp.Magic._
-    
-    // Implicit conversions from String, Seq[String], Array[String]
-    scala> "NLP is awesome!".parse
-    res0: edu.stanford.nlp.trees.Tree = (ROOT (S (NP (NNP NLP)) (VP (VBZ is) (ADJP (JJ awesome))) (. !)))
-    
-    // Optimize a [convex] function: (x_0 - 1)^2 + (x_1 - 2)^2
-    // Computes an analytic derivative if none given, or you can provide a derivative with .derivative()
-    // See Optimize.scala
-    scala> ((x:Array[Double]) => (x(0) - 1) * (x(0) - 1) + (x(1) - 2) * (x(1) - 2)).minimize(Array(0,0))
-    res1: Array[Double] = Array(0.999994999983933, 1.9999949999682796)
-    
-    // Build a simple classifier (with some trivial NLP features)
-    // Not really to be taken seriously, but kind of fun nonetheless
-    scala> val sentimentAnalyzer = Map( "Good plot" -> true, "Good acting" -> true, "Bad plot" -> false, "Bad experience" -> false ).classifier
-    scala> sentimentAnalyzer.classify("Good movie")
-    res0: O = true
-    scala> sentimentAnalyzer.classify("Bad movie")
-    res1: O = false
+```scala
+scala> import edu.stanford.nlp.Magic._
 
+// Implicit conversions from String, Seq[String], Array[String]
+scala> "NLP is awesome!".parse
+res0: edu.stanford.nlp.trees.Tree = (ROOT (S (NP (NNP NLP)) (VP (VBZ is) (ADJP (JJ awesome))) (. !)))
+
+// Optimize a [convex] function: (x_0 - 1)^2 + (x_1 - 2)^2
+// Computes an analytic derivative if none given, or you can provide a derivative with .derivative()
+// See Optimize.scala
+scala> ((x:Array[Double]) => (x(0) - 1) * (x(0) - 1) + (x(1) - 2) * (x(1) - 2)).minimize(Array(0,0))
+res1: Array[Double] = Array(0.999994999983933, 1.9999949999682796)
+
+// Build a simple classifier (with some trivial NLP features)
+// Not really to be taken seriously, but kind of fun nonetheless
+scala> val sentimentAnalyzer = Map( "Good plot" -> true, "Good acting" -> true, "Bad plot" -> false, "Bad experience" -> false ).classifier
+scala> sentimentAnalyzer.classify("Good movie")
+res0: O = true
+scala> sentimentAnalyzer.classify("Bad movie")
+res1: O = false
+```
 
 In-Depth: TokensRegex
 ---------------------
@@ -85,36 +88,40 @@ The wrapper provides a Scala-like interface to TokensRegex, in addition to
   a small domain specific language for a small subset of the syntax.
 To create a TokensRegex pattern, you can follow code as below:
 
-    import edu.stanford.nlp.TokensRegex
-    val Regex = TokensRegex("""[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""")
+```scala
+import edu.stanford.nlp.TokensRegex
+val Regex = TokensRegex("""[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""")
 
-    // matches() returns true if the entire sentence matches
-    Regex matches Sentence("Stanford CS") 
+// matches() returns true if the entire sentence matches
+Regex matches Sentence("Stanford CS") 
 
-    // allMatches() returns all matches for a regex in the sentence
-    for (result <- Regex allMatches Sentence("Stanford NLP is part of Stanford CS")) {
-      println(result)  // prints List(Stanford, NLP) and List(Stanford, CS)
-    }
+// allMatches() returns all matches for a regex in the sentence
+for (result <- Regex allMatches Sentence("Stanford NLP is part of Stanford CS")) {
+  println(result)  // prints List(Stanford, NLP) and List(Stanford, CS)
+}
 
-    // Pattern matching
-    val Regex(subdepartment) = Sentence("Stanford NLP")
-    println(subdepartment)  // prints List(NLP)
+// Pattern matching
+val Regex(subdepartment) = Sentence("Stanford NLP")
+println(subdepartment)  // prints List(NLP)
 
-    // ...or...
-    Sentence("Stanford NLP") match {
-      case Regex(subdepartment) =>
-        println(subdepartment)  // reaches here; prints List(NLP)
-      case _ =>
-        println("NO MATCH")  // would reach here if not an exact match
-    }
+// ...or...
+Sentence("Stanford NLP") match {
+  case Regex(subdepartment) =>
+    println(subdepartment)  // reaches here; prints List(NLP)
+  case _ =>
+    println("NO MATCH")  // would reach here if not an exact match
+}
+```
 
 Of course, the usual magic is still valid as well:
 
-    import edu.stanford.nlp.TokensRegex
-    import edu.stanford.nlp.Magic._
-   
-    // note: String -> Sentence can't be implicitly converted, else String.matches(String) is invoked
-    """[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""" matches ( Sentence("Stanford NLP") )
+```scala
+import edu.stanford.nlp.TokensRegex
+import edu.stanford.nlp.Magic._
+
+// note: String -> Sentence can't be implicitly converted, else String.matches(String) is invoked
+"""[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""" matches ( Sentence("Stanford NLP") )
+```
 
 In addition, a small domain specific language can help make some compile-time
   checks of simple regular expressions.
@@ -124,8 +131,10 @@ In the language, every token is denoted in parentheses `( )`, every term
   concatenated with each other.
 To illustrate:
 
-    import edu.stanford.nlp._
-    import edu.stanford.nlp.TokensRegex._
-   
-    val Regex = ( word("Stanford") ) ( word("[A-Z].*"), tag("NNP") )
-    Regex matches Sentence("Stanford CS")  // return true
+```scala
+import edu.stanford.nlp._
+import edu.stanford.nlp.TokensRegex._
+
+val Regex = ( word("Stanford") ) ( word("[A-Z].*"), tag("NNP") )
+Regex matches Sentence("Stanford CS")  // return true
+```
