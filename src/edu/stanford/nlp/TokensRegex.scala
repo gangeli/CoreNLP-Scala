@@ -39,7 +39,7 @@ case class TokensRegex(override val toString:String) {
     case (input:Seq[CoreLabel]) =>
       val matcher = pattern getMatcher(input toList)
       if (matcher matches) {
-        Some(for (i <- 0 until matcher.groupCount) yield 
+        Some(for (i <- 1 until matcher.groupCount) yield 
           matcher groupNodes(i) map( _ match {
           case (x:CoreLabel) => x
           case (x:CoreMap) => new CoreLabel(x)

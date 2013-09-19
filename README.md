@@ -106,6 +106,7 @@ The wrapper provides a Scala-like interface to TokensRegex, in addition to
 To create a TokensRegex pattern, you can follow code as below:
 
 ```scala
+import edu.stanford.nlp._
 import edu.stanford.nlp.TokensRegex
 val Regex = TokensRegex("""[ { word:/Stanford/ } ] ([ { tag:/NNP/ }])""")
 
