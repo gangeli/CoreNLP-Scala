@@ -75,6 +75,8 @@ object TokensRegex {
   }
   
   // Dump to TokensRegex object
+  implicit def string2tokensregex(str:MarkedString):TokensRegex
+    = new TokensRegex(s"""[${str.str}]""")
   implicit def tokens2tokensregex(tokens:Tokens):TokensRegex
     = new TokensRegex(s"""[${tokens.regexps.reverse.mkString("] [")}]""")
 }

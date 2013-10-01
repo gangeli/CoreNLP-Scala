@@ -125,4 +125,9 @@ trait CoreLabelSeq extends Seq[CoreLabel] {
       override def hasNext:Boolean = index < CoreLabelSeq.this.length
       override def next:CoreLabel = { index += 1; apply(index - 1); }
     }
+
+  //
+  // Common Methods
+  //
+  def matches(t:TokensRegex) = t.matches(this)
 }

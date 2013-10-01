@@ -157,6 +157,26 @@ case class Sentence(word:Array[String]) extends CoreLabelSeq {
     }
   }
 
+  def headIndex(spanBegin:Int, spanEnd:Int):Int = {
+    parse.setSpans
+    val (score, tree) = parse.foldLeft( spanBegin + (length - spanEnd), parse ){
+        case ( (smallestDiffSoFar:Int, bestTreeSoFar:Tree), tree:Tree ) =>
+      if (tree != null && tree.getSpan != null) {
+        val (treeBegin, treeEnd) = (tree.getSpan.getSource, tree.getSpan.getTarget)
+        val diff = scala.math.abs(spanBegin - treeBegin)
+                     + scala.math.abs(spanEnd - treeEnd)
+        if (treeBegin >= spanBegin && treeEnd <= spanEnd &&
+            diff < smallestDiffSoFar) { (diff, tree) }
+        else { (smallestDiffSoFar, bestTreeSoFar) }
+      } else { (smallestDiffSoFar, bestTreeSoFar) }
+    }
+    val headLeaf = tree.headTerminal(collinsHeadFinder)
+    val index = parse.getLeaves().indexWhere{ (x:Tree) => x eq headLeaf }
+    if (index < spanBegin || index >= spanEnd) spanEnd - 1 else index
+  }
+  
+  def headWord(spanBegin:Int, spanEnd:Int):String = word(headIndex(spanBegin, spanEnd))
+
   lazy val pos:Array[String]
     = if (length == 0) new Array[String](0)
       else NLP.tagger.apply(word.toList).map( _.tag ).toArray
