@@ -29,7 +29,7 @@ berkeley: stanford
 
 stanford: ${SOURCES}
 	mkdir -p $(BUILD)
-	sed -r -e 's/BerkeleyUtil.berkeleyParser/throw new IllegalStateException("Could not find parser model (and was not compiled to run with Berkeley parser)")/g' ${SRC}/edu/stanford/nlp/NLP.scala > /tmp/NLP_stanfordonly.scala
+	sed -e 's/BerkeleyUtil.berkeleyParser/throw new IllegalStateException("Could not find parser model (and was not compiled to run with Berkeley parser)")/g' ${SRC}/edu/stanford/nlp/NLP.scala > /tmp/NLP_stanfordonly.scala
 	$(SCALAC) -cp $(CORENLP) -d $(BUILD) `find $(SRC) -name "*.scala" ! -name "*Berkeley.scala" ! -name "NLP.scala"` /tmp/NLP_stanfordonly.scala
 	rm /tmp/NLP_stanfordonly.scala
 
