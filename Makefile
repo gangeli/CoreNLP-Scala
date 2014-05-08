@@ -19,7 +19,7 @@ BUILD=classes
 TEST_BUILD=test/classes
 DIST=dist
 
-dist: berkeley
+dist: stanford
 	mkdir -p ${DIST}
 	jar cf ${DIST}/corenlp-scala.jar -C $(BUILD) .
 	jar uf ${DIST}/corenlp-scala.jar -C $(SRC) .
