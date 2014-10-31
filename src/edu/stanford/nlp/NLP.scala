@@ -1,4 +1,4 @@
-package edu.stanford.nlp;
+package edu.stanford.nlp
 
 import scala.collection.JavaConversions._
 import scala.collection.MapLike
@@ -58,11 +58,7 @@ object NLP {
       }
     }
   }
-  lazy val parser = {
-    try {                                  stanfordParser
-    } catch { case (e:RuntimeException) => BerkeleyUtil.berkeleyParser
-    }
-  }
+  lazy val parser = stanfordParser
   // ----------
   // Stanford CoreNLP Components
   // ----------

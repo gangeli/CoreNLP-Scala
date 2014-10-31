@@ -1,4 +1,4 @@
-package edu.stanford.nlp;
+package edu.stanford.nlp
 
 import edu.stanford.nlp.pipeline.DefaultPaths._
 
