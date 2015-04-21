@@ -12,7 +12,7 @@ JAVAC=javac
 SCALAC=scalac
 
 SRC=src
-SOURCES = $(wildcard src/edu/stanford/nlp/*.scala)
+SOURCES = $(wildcard src/main/scala/edu/stanford/nlp/*.scala)
 TEST_SRC=test/src
 LIB=lib
 BUILD=classes

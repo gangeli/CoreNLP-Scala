@@ -1,14 +1,15 @@
-name := "CoreNLP-Scala"
+name := "corenlp"
 
-version := "1.0"
+organization := "corenlp"
 
-scalaSource in Compile := baseDirectory.value / "src"
+scalaVersion := "2.11.5"
 
-excludeFilter in unmanagedSources := "Berkeley.scala"
+version := "0.0.2"
 
 libraryDependencies ++= Seq(
-  // "edu.berkeley.nlp" % "berkeleyparser" % "r32",
+  "edu.berkeley.nlp" % "berkeleyparser" % "r32",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.4",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.4" classifier "models",
   "edu.stanford.nlp" % "stanford-parser" % "3.4"
 )
+
