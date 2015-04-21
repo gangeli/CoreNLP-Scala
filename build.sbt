@@ -2,7 +2,7 @@ name := "CoreNLP-Scala"
 
 organization := "CoreNLP-Scala"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.5"
 
 libraryDependencies ++= Seq(
   "edu.stanford.nlp" % "stanford-corenlp" % "3.3.0" artifacts(Artifact("stanford-corenlp", "models"), Artifact("stanford-corenlp")),
