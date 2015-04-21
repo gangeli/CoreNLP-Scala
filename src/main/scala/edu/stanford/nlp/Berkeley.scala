@@ -18,7 +18,7 @@ object BerkeleyUtil {
   type BerkeleyTree = edu.berkeley.nlp.syntax.Tree[String]
 
   implicit def stanfordTree2BerkeleyTree(btree:BerkeleyTree):Tree = {
-    val roots = TreeAnnotations.unAnnotateTree(btree).getChildren;
+    val roots = TreeAnnotations.unAnnotateTree(btree,true).getChildren()
     if (roots.isEmpty) {
       new LabeledScoredTreeNode();
     } else {
