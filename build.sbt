@@ -4,7 +4,7 @@ organization := "corenlp"
 
 scalaVersion := "2.11.5"
 
-version := "0.0.1"
+version := "0.0.2"
 
 libraryDependencies ++= Seq(
   "edu.berkeley.nlp" % "berkeleyparser" % "r32",
