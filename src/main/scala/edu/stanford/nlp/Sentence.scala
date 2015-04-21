@@ -187,6 +187,8 @@ case class Sentence(word:Array[String]) extends CoreLabelSeq {
 
   lazy val ner:Array[String] = nerCRF(word, pos)
 
+  lazy val truecase:Array[String] = trueCaser(word, pos, lemma)
+
   // helper functions
   def words:Array[String] = word
   def tags:Array[String] = pos

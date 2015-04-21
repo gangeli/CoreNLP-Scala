@@ -5,7 +5,9 @@ organization := "CoreNLP-Scala"
 scalaVersion := "2.11.5"
 
 libraryDependencies ++= Seq(
-  "edu.stanford.nlp" % "stanford-corenlp" % "3.3.0" artifacts(Artifact("stanford-corenlp", "models"), Artifact("stanford-corenlp")),
-  "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test",
-  "edu.berkeley.nlp" % "berkeleyparser" % "r32"
+  // "edu.berkeley.nlp" % "berkeleyparser" % "r32",
+  "edu.stanford.nlp" % "stanford-corenlp" % "3.4",
+  "edu.stanford.nlp" % "stanford-corenlp" % "3.4" classifier "models",
+  "edu.stanford.nlp" % "stanford-parser" % "3.4"
 )
+

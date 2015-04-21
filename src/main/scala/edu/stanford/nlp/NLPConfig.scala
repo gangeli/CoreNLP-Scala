@@ -1,4 +1,4 @@
-package edu.stanford.nlp;
+package edu.stanford.nlp
 
 import edu.stanford.nlp.pipeline.DefaultPaths._
 
@@ -25,6 +25,12 @@ object NLPConfig {
     var tolerance:Double = 1e-5
     var wiggle:Double = 1e-5
     var algorithm = "LBFGS" // | braindead | ...
+  }
+
+  object truecase {
+    var model:String = "edu/stanford/nlp/models/truecase/truecasing.fast.caseless.qn.ser.gz"
+    var disambiguation_list:String = "edu/stanford/nlp/models/truecase/MixDisambiguation.list"
+    var bias:String = "INIT_UPPER:-0.7,UPPER:-0.7,O:0"
   }
 
   def caseless:Unit = {
