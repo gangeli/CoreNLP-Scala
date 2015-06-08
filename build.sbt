@@ -1,5 +1,9 @@
 name := "CoreNLP-Scala"
 
+organization := "com.github.mrmechko"
+
+scalaVersion := "2.11.6"
+
 version := "1.0"
 
 scalaSource in Compile := baseDirectory.value / "src"
@@ -12,3 +16,7 @@ libraryDependencies ++= Seq(
   "edu.stanford.nlp" % "stanford-corenlp" % "3.4" classifier "models",
   "edu.stanford.nlp" % "stanford-parser" % "3.4"
 )
+
+crossScalaVersions := Seq("2.10.4", "2.11.6")
+
+publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
