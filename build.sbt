@@ -1,6 +1,6 @@
 name := "CoreNLP-Scala"
 
-organization := "com.github.mrmechko"
+organization := "com.github.gangeli"
 
 scalaVersion := "2.11.6"
 
