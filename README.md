@@ -1,3 +1,6 @@
+This project has been deprecated in favor of the [Simple CoreNLP API](http://stanfordnlp.github.io/CoreNLP/simple.html)
+===================================================================
+
 CoreNLP-Scala
 =============
 
